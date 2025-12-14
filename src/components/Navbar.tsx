@@ -92,7 +92,7 @@ const Navbar = () => {
                 className="flex items-center gap-2 text-primary-foreground hover:text-secondary transition-colors"
               >
                 <Phone className="w-4 h-4" />
-                <span className="text-sm font-medium">+91 99998 61338</span>
+                <span className="text-sm font-medium">+91 99998 61338 </span>
               </a>
               <button
                 onClick={() => scrollToSection("#contact")}
@@ -138,7 +138,7 @@ const Navbar = () => {
                 className="flex items-center gap-2 text-primary-foreground"
               >
                 <Phone className="w-4 h-4" />
-                <span>+91 99998 61338</span>
+                <span>+91 99998 61338 </span>
               </a>
               <a
                 href="mailto:modulusclasses01@gmail.com"
@@ -166,7 +166,7 @@ const Navbar = () => {
               <span className="mx-4">//</span>
               Live Online Classes
               <span className="mx-4">//</span>
-              +91 99998 61338
+              +91 99998 61338 || +91 99998 61336
               <span className="mx-4">//</span>
               Expert Faculty for PCM/PCB
               <span className="mx-4">//</span>

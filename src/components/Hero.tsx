@@ -98,7 +98,7 @@ const Hero = () => {
                 <p className="text-sm text-muted-foreground">Success Rate</p>
               </div>
               <div className="text-center">
-                <p className="text-3xl font-bold text-secondary">10+</p>
+                <p className="text-3xl font-bold text-secondary">12+</p>
                 <p className="text-sm text-muted-foreground">Years Experience</p>
               </div>
             </div>

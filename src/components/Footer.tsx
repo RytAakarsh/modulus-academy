@@ -51,25 +51,25 @@ const Footer = () => {
             </p>
             <div className="flex items-center gap-4">
               <a
-                href="#"
+                href="https://www.instagram.com/modulusclassess?igsh=MXdrZGM1ZG12N2pncA=="
                 className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-secondary hover:text-secondary-foreground transition-colors"
               >
                 <Facebook className="w-5 h-5" />
               </a>
               <a
-                href="#"
+                href="https://www.instagram.com/modulusclassess?igsh=MXdrZGM1ZG12N2pncA=="
                 className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-secondary hover:text-secondary-foreground transition-colors"
               >
                 <Instagram className="w-5 h-5" />
               </a>
               <a
-                href="#"
+                href="https://www.instagram.com/modulusclassess?igsh=MXdrZGM1ZG12N2pncA=="
                 className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-secondary hover:text-secondary-foreground transition-colors"
               >
                 <Youtube className="w-5 h-5" />
               </a>
               <a
-                href="#"
+                href="https://www.instagram.com/modulusclassess?igsh=MXdrZGM1ZG12N2pncA=="
                 className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-secondary hover:text-secondary-foreground transition-colors"
               >
                 <Twitter className="w-5 h-5" />
@@ -130,6 +130,12 @@ const Footer = () => {
                   className="text-primary-foreground/80 hover:text-secondary transition-colors"
                 >
                   +91 99998 61338
+                </a>
+                <a
+                  href="tel:+919999861338"
+                  className="text-primary-foreground/80 hover:text-secondary transition-colors"
+                >
+                  +91 99998 61336
                 </a>
               </li>
               <li className="flex items-start gap-3">
