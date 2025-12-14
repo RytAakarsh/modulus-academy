@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { Phone, Mail, MapPin, Clock, Send, ArrowRight } from "lucide-react";
+import { Phone, Mail, MapPin, Clock, Send, Loader2 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const Contact = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -30,8 +32,34 @@ const Contact = () => {
     return () => observer.disconnect();
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!formData.name || !formData.email || !formData.phone || !formData.course) {
+      toast({ title: "Please fill all required fields", variant: "destructive" });
+      return;
+    }
+
+    setIsLoading(true);
+
+    const { error } = await supabase.from('form_submissions').insert({
+      submission_type: 'contact',
+      full_name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      course: formData.course,
+      message: formData.message || null,
+      email_verified: false,
+      phone_verified: false,
+    });
+
+    setIsLoading(false);
+
+    if (error) {
+      toast({ title: "Failed to send message", description: "Please try again.", variant: "destructive" });
+      return;
+    }
+
     toast({
       title: "Message Sent!",
       description: "We'll get back to you within 24 hours.",
@@ -112,7 +140,7 @@ const Contact = () => {
                       href="tel:+919999861338"
                       className="text-muted-foreground hover:text-primary transition-colors"
                     >
-                      +91 87009 46839
+                      +91 99998 61338
                     </a>
                   </div>
                 </div>
@@ -124,10 +152,10 @@ const Contact = () => {
                   <div>
                     <h4 className="font-semibold text-foreground mb-1">Email</h4>
                     <a
-                      href="mailto:abhinav.asus.01@gmail.com"
+                      href="mailto:modulusclasses01@gmail.com"
                       className="text-muted-foreground hover:text-primary transition-colors break-all"
                     >
-                      abhinav.asus.01@gmail.com
+                      modulusclasses01@gmail.com
                     </a>
                   </div>
                 </div>
@@ -283,10 +311,11 @@ const Contact = () => {
 
               <button
                 type="submit"
-                className="w-full bg-primary text-primary-foreground py-4 rounded-xl font-semibold flex items-center justify-center gap-2 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
+                disabled={isLoading}
+                className="w-full bg-primary text-primary-foreground py-4 rounded-xl font-semibold flex items-center justify-center gap-2 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <Send className="w-5 h-5" />
-                <span>Send Message</span>
+                {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
+                <span>{isLoading ? "Sending..." : "Send Message"}</span>
               </button>
             </form>
           </div>
