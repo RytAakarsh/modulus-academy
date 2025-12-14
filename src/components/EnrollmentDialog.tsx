@@ -63,7 +63,7 @@ const EnrollmentDialog = ({
     // For demo, show OTP in toast (in production, send via email)
     toast({ 
       title: "OTP Sent!", 
-      description: `Demo OTP for ${formData.email}: ${otp}` 
+      description: "Please check your email for the verification code."
     });
     
     setIsLoading(false);
@@ -121,7 +121,7 @@ const EnrollmentDialog = ({
     
     toast({ 
       title: "OTP Sent!", 
-      description: `Demo OTP for ${formData.phone}: ${otp}` 
+      description: "Please check your phone for the verification code."
     });
     
     setIsLoading(false);
