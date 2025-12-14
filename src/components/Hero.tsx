@@ -1,7 +1,5 @@
 import { ArrowRight, Play, Star } from "lucide-react";
-import student1 from "@/assets/student-1.jpg";
-import student2 from "@/assets/student-2.jpg";
-import student3 from "@/assets/student-3.jpg";
+import hero3dStudent from "@/assets/hero-3d-student.png";
 
 const Hero = () => {
   const scrollToSection = (href: string) => {
@@ -31,7 +29,7 @@ const Hero = () => {
             <div className="inline-flex items-center gap-2 bg-secondary/20 backdrop-blur-sm px-4 py-2 rounded-full border border-secondary/30 animate-fade-in-down">
               <Star className="w-4 h-4 text-secondary fill-secondary" />
               <span className="text-sm font-medium text-foreground">
-                Empowering Future Physicists
+                Empowering Future Scientists & Engineers
               </span>
             </div>
 
@@ -40,7 +38,7 @@ const Hero = () => {
 
             {/* Tagline */}
             <p className="text-lg md:text-xl text-muted-foreground font-medium animate-fade-in-up opacity-0 animation-delay-100">
-              Master Physics with Expert Guidance
+              Master Science with Expert Guidance
             </p>
 
             {/* Main Heading */}
@@ -61,14 +59,14 @@ const Hero = () => {
 
             {/* Courses */}
             <p className="text-xl md:text-2xl font-bold text-foreground animate-fade-in-up opacity-0 animation-delay-500">
-              CLASS 11 | CLASS 12 | IIT-JEE | NEET
+              CLASS 11 | CLASS 12 | IIT-JEE | NEET | AI & PYTHON
             </p>
 
             {/* Description */}
             <p className="text-muted-foreground text-lg max-w-xl animate-fade-in-up opacity-0 animation-delay-600">
-              At Modulus Classes, we specialize in Physics education for Class 11, 
-              Class 12, IIT-JEE, and NEET aspirants. Our expert faculty and 
-              personalized approach help students achieve their dreams.
+              At Modulus Classes, we provide comprehensive coaching for Class 11, 
+              Class 12, IIT-JEE, NEET, and AI & Python programming. Our expert faculty 
+              and personalized approach help students achieve their dreams in Science, Engineering & Technology.
             </p>
 
             {/* CTA Buttons */}
@@ -106,37 +104,20 @@ const Hero = () => {
             </div>
           </div>
 
-          {/* Right Content - Student Images */}
-          <div className="relative h-[500px] lg:h-[600px] hidden md:block">
-            {/* Pill shaped image containers */}
-            <div className="absolute left-0 top-16 w-44 h-72 rounded-[100px] overflow-hidden shadow-2xl animate-fade-in-right opacity-0 animation-delay-200 hover:scale-105 transition-transform duration-500">
+          {/* Right Content - 3D Student Illustration */}
+          <div className="relative h-[500px] lg:h-[600px] hidden md:flex items-center justify-center">
+            <div className="relative animate-fade-in-right opacity-0 animation-delay-300">
               <img 
-                src={student1} 
-                alt="Student studying physics" 
-                className="w-full h-full object-cover"
+                src={hero3dStudent} 
+                alt="3D Student with educational elements" 
+                className="w-full max-w-lg h-auto object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500"
               />
+              
+              {/* Floating decorative elements */}
+              <div className="absolute -bottom-4 -left-8 w-20 h-20 rounded-full bg-accent/20 animate-float blur-sm" />
+              <div className="absolute top-10 -right-4 w-12 h-12 rounded-full bg-secondary/30 animate-float animation-delay-300" />
+              <div className="absolute -top-8 left-1/4 w-16 h-16 rounded-full bg-primary/20 animate-float animation-delay-500" />
             </div>
-
-            <div className="absolute left-1/2 -translate-x-1/2 top-0 w-48 h-80 rounded-[100px] overflow-hidden shadow-2xl animate-fade-in-down opacity-0 animation-delay-300 hover:scale-105 transition-transform duration-500">
-              <img 
-                src={student2} 
-                alt="Happy student" 
-                className="w-full h-full object-cover"
-              />
-            </div>
-
-            <div className="absolute right-0 top-8 w-44 h-72 rounded-[100px] overflow-hidden shadow-2xl animate-fade-in-left opacity-0 animation-delay-400 hover:scale-105 transition-transform duration-500">
-              <img 
-                src={student3} 
-                alt="Student with backpack" 
-                className="w-full h-full object-cover"
-              />
-            </div>
-
-            {/* Decorative elements */}
-            <div className="absolute bottom-20 left-10 w-20 h-20 rounded-full bg-accent/20 animate-float" />
-            <div className="absolute top-40 right-20 w-12 h-12 rounded-full bg-secondary/30 animate-float animation-delay-300" />
-            <div className="absolute bottom-40 right-10 w-16 h-16 rounded-full bg-primary/20 animate-float animation-delay-500" />
           </div>
         </div>
       </div>

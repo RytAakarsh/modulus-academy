@@ -4,7 +4,7 @@ import Hero from "@/components/Hero";
 import About from "@/components/About";
 import Courses from "@/components/Courses";
 import Syllabus from "@/components/Syllabus";
-import Mentors from "@/components/Mentors";
+import Notes from "@/components/Notes";
 import Approach from "@/components/Approach";
 import Testimonials from "@/components/Testimonials";
 import Stats from "@/components/Stats";
@@ -15,14 +15,14 @@ const Index = () => {
   return (
     <>
       <Helmet>
-        <title>Modulus Classes | Expert Physics Coaching for IIT-JEE, NEET, Class 11 & 12</title>
+        <title>Modulus Classes | Expert Coaching for IIT-JEE, NEET, Class 11 & 12, AI & Python</title>
         <meta
           name="description"
-          content="Join Modulus Classes for expert Physics coaching. We offer specialized courses for Class 11, Class 12, IIT-JEE, and NEET preparation with experienced faculty and proven results."
+          content="Join Modulus Classes for expert coaching in Physics, Chemistry, Maths, Biology. We offer courses for Class 11, Class 12, IIT-JEE, NEET, and AI & Python programming."
         />
         <meta
           name="keywords"
-          content="Physics coaching, IIT-JEE preparation, NEET Physics, Class 11 Physics, Class 12 Physics, online Physics classes, competitive exam preparation"
+          content="IIT-JEE coaching, NEET preparation, Class 11, Class 12, Physics, Chemistry, Maths, Biology, AI Python course, online classes"
         />
         <meta name="author" content="Modulus Classes" />
         <link rel="canonical" href="https://modulusclasses.com" />
@@ -34,7 +34,7 @@ const Index = () => {
         <About />
         <Courses />
         <Syllabus />
-        <Mentors />
+        <Notes />
         <Approach />
         <Testimonials />
         <Stats />
