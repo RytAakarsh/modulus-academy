@@ -4,7 +4,7 @@ import { Users, Trophy, BookOpen, Star } from "lucide-react";
 const stats = [
   {
     icon: Users,
-    value: 1000,
+    value: 10000,
     suffix: "+",
     label: "Students Enrolled",
     color: "text-primary",

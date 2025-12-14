@@ -90,7 +90,7 @@ const Hero = () => {
             {/* Stats */}
             <div className="flex flex-wrap gap-8 animate-fade-in-up opacity-0 animation-delay-600">
               <div className="text-center">
-                <p className="text-3xl font-bold text-primary">1000+</p>
+                <p className="text-3xl font-bold text-primary">10,000+</p>
                 <p className="text-sm text-muted-foreground">Students</p>
               </div>
               <div className="text-center">
