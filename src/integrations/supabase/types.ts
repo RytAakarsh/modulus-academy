@@ -14,7 +14,81 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      form_submissions: {
+        Row: {
+          chapter: string | null
+          course: string | null
+          created_at: string
+          email: string
+          email_verified: boolean | null
+          full_name: string
+          id: string
+          message: string | null
+          phone: string
+          phone_verified: boolean | null
+          subject: string | null
+          submission_type: Database["public"]["Enums"]["submission_type"]
+        }
+        Insert: {
+          chapter?: string | null
+          course?: string | null
+          created_at?: string
+          email: string
+          email_verified?: boolean | null
+          full_name: string
+          id?: string
+          message?: string | null
+          phone: string
+          phone_verified?: boolean | null
+          subject?: string | null
+          submission_type: Database["public"]["Enums"]["submission_type"]
+        }
+        Update: {
+          chapter?: string | null
+          course?: string | null
+          created_at?: string
+          email?: string
+          email_verified?: boolean | null
+          full_name?: string
+          id?: string
+          message?: string | null
+          phone?: string
+          phone_verified?: boolean | null
+          subject?: string | null
+          submission_type?: Database["public"]["Enums"]["submission_type"]
+        }
+        Relationships: []
+      }
+      otp_verifications: {
+        Row: {
+          created_at: string
+          expires_at: string
+          id: string
+          identifier: string
+          otp_code: string
+          type: string
+          verified: boolean | null
+        }
+        Insert: {
+          created_at?: string
+          expires_at: string
+          id?: string
+          identifier: string
+          otp_code: string
+          type: string
+          verified?: boolean | null
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string
+          id?: string
+          identifier?: string
+          otp_code?: string
+          type?: string
+          verified?: boolean | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +97,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      submission_type: "enrollment" | "contact" | "notes_request"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +224,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      submission_type: ["enrollment", "contact", "notes_request"],
+    },
   },
 } as const

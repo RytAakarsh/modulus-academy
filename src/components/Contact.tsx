@@ -109,7 +109,7 @@ const Contact = () => {
                   <div>
                     <h4 className="font-semibold text-foreground mb-1">Phone</h4>
                     <a
-                      href="tel:+918700946839"
+                      href="tel:+919999861338"
                       className="text-muted-foreground hover:text-primary transition-colors"
                     >
                       +91 87009 46839
@@ -175,7 +175,7 @@ const Contact = () => {
                 Get a free demo class and see our teaching methodology in action!
               </p>
               <a
-                href="tel:+918700946839"
+                href="tel:+919999861338"
                 className="inline-flex items-center gap-2 bg-secondary text-secondary-foreground px-6 py-3 rounded-xl font-semibold hover:bg-orange transition-colors"
               >
                 <Phone className="w-5 h-5" />
@@ -256,13 +256,14 @@ const Contact = () => {
                   value={formData.course}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all appearance-none"
                 >
                   <option value="">Choose a course</option>
-                  <option value="class11">Class 11 Physics</option>
-                  <option value="class12">Class 12 Physics</option>
-                  <option value="iitjee">IIT-JEE Physics</option>
-                  <option value="neet">NEET Physics</option>
+                  <option value="class11">Class 11 (PCM/PCB)</option>
+                  <option value="class12">Class 12 (PCM/PCB)</option>
+                  <option value="iitjee">IIT-JEE (Physics, Chemistry, Maths)</option>
+                  <option value="neet">NEET (Physics, Chemistry, Biology)</option>
+                  <option value="ai-python">AI & Python Programming</option>
                 </select>
               </div>
 

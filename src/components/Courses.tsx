@@ -1,63 +1,91 @@
 import { ArrowRight, Clock, Users, Star } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
+import { useEffect, useRef } from "react";
+import EnrollmentDialog from "./EnrollmentDialog";
+
+import courseClass11 from "@/assets/course-class11.png";
+import courseClass12 from "@/assets/course-class12.png";
+import courseIitjee from "@/assets/course-iitjee.png";
+import courseNeet from "@/assets/course-neet.png";
+import courseAiPython from "@/assets/course-ai-python.png";
 
 const courses = [
   {
-    id: 1,
-    title: "Class 11 Physics",
+    id: "class11",
+    title: "Class 11",
     subtitle: "Foundation Course",
     description:
-      "Build a strong foundation in Physics with comprehensive coverage of Class 11 NCERT and competitive exam preparation.",
-    features: ["Mechanics", "Thermodynamics", "Waves", "Live Classes"],
+      "Build a strong foundation with comprehensive coverage of Physics, Chemistry, Mathematics & Biology for Class 11.",
+    subjects: ["Physics", "Chemistry", "Maths", "Biology"],
     color: "from-green-400 to-green-600",
     bgColor: "bg-green-50",
     iconColor: "text-green-600",
     duration: "1 Year",
     students: "100+",
+    image: courseClass11,
   },
   {
-    id: 2,
-    title: "Class 12 Physics",
+    id: "class12",
+    title: "Class 12",
     subtitle: "Advanced Course",
     description:
-      "Master advanced Physics concepts for board exams and competitive preparations with expert guidance.",
-    features: ["Electrodynamics", "Optics", "Modern Physics", "Board Prep"],
+      "Master advanced concepts for board exams with expert guidance in Physics, Chemistry, Mathematics & Biology.",
+    subjects: ["Physics", "Chemistry", "Maths", "Biology"],
     color: "from-secondary to-orange",
     bgColor: "bg-secondary/10",
     iconColor: "text-secondary",
     duration: "1 Year",
     students: "150+",
+    image: courseClass12,
   },
   {
-    id: 3,
-    title: "IIT-JEE Physics",
-    subtitle: "Competitive Excellence",
+    id: "iitjee",
+    title: "IIT-JEE",
+    subtitle: "Engineering Excellence",
     description:
-      "Intensive preparation for JEE Main and Advanced with problem-solving techniques and concept clarity.",
-    features: ["JEE Main", "JEE Advanced", "Mock Tests", "Doubt Sessions"],
+      "Intensive preparation for JEE Main and Advanced with problem-solving techniques in Physics, Chemistry & Maths.",
+    subjects: ["Physics", "Chemistry", "Maths"],
     color: "from-primary to-navy-light",
     bgColor: "bg-primary/10",
     iconColor: "text-primary",
     duration: "2 Years",
     students: "200+",
+    image: courseIitjee,
   },
   {
-    id: 4,
-    title: "NEET Physics",
+    id: "neet",
+    title: "NEET",
     subtitle: "Medical Entrance",
     description:
-      "Specialized Physics coaching for NEET aspirants with focus on NCERT and competitive problem-solving.",
-    features: ["NCERT Based", "NEET Pattern", "Previous Years", "Test Series"],
+      "Specialized coaching for NEET aspirants with focus on NCERT and competitive problem-solving in PCB.",
+    subjects: ["Physics", "Chemistry", "Biology"],
     color: "from-accent to-red-light",
     bgColor: "bg-accent/10",
     iconColor: "text-accent",
     duration: "2 Years",
     students: "180+",
+    image: courseNeet,
+  },
+  {
+    id: "ai-python",
+    title: "AI & Python",
+    subtitle: "Future Tech Skills",
+    description:
+      "Learn Python programming and Artificial Intelligence fundamentals. Perfect for all STEM students looking to build tech skills.",
+    subjects: ["Python", "Data Science", "Machine Learning"],
+    color: "from-purple-500 to-purple-700",
+    bgColor: "bg-purple-50",
+    iconColor: "text-purple-600",
+    duration: "6 Months",
+    students: "50+",
+    image: courseAiPython,
   },
 ];
 
 const Courses = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState("");
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -76,6 +104,11 @@ const Courses = () => {
 
     return () => observer.disconnect();
   }, []);
+
+  const handleEnroll = (courseId: string) => {
+    setSelectedCourse(courseId);
+    setDialogOpen(true);
+  };
 
   return (
     <section
@@ -116,14 +149,14 @@ const Courses = () => {
               isVisible ? "animate-fade-in-up animation-delay-200" : "opacity-0"
             }`}
           >
-            Choose from our specialized Physics courses designed for different
-            academic levels and competitive examinations.
+            Choose from our specialized courses covering Physics, Chemistry, Mathematics, 
+            Biology, and cutting-edge AI & Python programming for different academic levels.
           </p>
         </div>
 
-        {/* Course Cards Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {courses.map((course, index) => (
+        {/* Course Cards Grid - First Row (4 cards) */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+          {courses.slice(0, 4).map((course, index) => (
             <div
               key={course.id}
               className={`group bg-card rounded-2xl overflow-hidden shadow-lg border border-border hover:shadow-2xl transition-all duration-500 ${
@@ -133,11 +166,14 @@ const Courses = () => {
                 animationDelay: isVisible ? `${(index + 2) * 100}ms` : "0ms",
               }}
             >
-              {/* Card Header with Gradient */}
-              <div
-                className={`h-32 bg-gradient-to-br ${course.color} relative overflow-hidden`}
-              >
-                <div className="absolute inset-0 bg-black/10" />
+              {/* Card Header with Image */}
+              <div className="h-40 relative overflow-hidden">
+                <img 
+                  src={course.image} 
+                  alt={course.title}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+                <div className={`absolute inset-0 bg-gradient-to-t ${course.color} opacity-60`} />
                 <div className="absolute bottom-4 left-4 right-4">
                   <p className="text-white/80 text-sm font-medium">
                     {course.subtitle}
@@ -146,24 +182,22 @@ const Courses = () => {
                     {course.title}
                   </h3>
                 </div>
-                {/* Decorative circle */}
-                <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full" />
               </div>
 
               {/* Card Body */}
               <div className="p-6">
-                <p className="text-muted-foreground text-sm mb-4 line-clamp-3">
+                <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
                   {course.description}
                 </p>
 
-                {/* Features */}
+                {/* Subjects */}
                 <div className="flex flex-wrap gap-2 mb-4">
-                  {course.features.map((feature) => (
+                  {course.subjects.map((subject) => (
                     <span
-                      key={feature}
+                      key={subject}
                       className={`${course.bgColor} ${course.iconColor} text-xs font-medium px-2 py-1 rounded-full`}
                     >
-                      {feature}
+                      {subject}
                     </span>
                   ))}
                 </div>
@@ -186,10 +220,7 @@ const Courses = () => {
 
                 {/* CTA */}
                 <button
-                  onClick={() => {
-                    const element = document.querySelector("#contact");
-                    element?.scrollIntoView({ behavior: "smooth" });
-                  }}
+                  onClick={() => handleEnroll(course.id)}
                   className="w-full flex items-center justify-center gap-2 bg-foreground/5 hover:bg-primary hover:text-primary-foreground text-foreground py-3 rounded-xl font-semibold transition-all duration-300 group-hover:bg-primary group-hover:text-primary-foreground"
                 >
                   <span>Enroll Now</span>
@@ -199,7 +230,92 @@ const Courses = () => {
             </div>
           ))}
         </div>
+
+        {/* Second Row - AI & Python Card (Centered) */}
+        <div className="flex justify-center">
+          <div
+            className={`group bg-card rounded-2xl overflow-hidden shadow-lg border border-border hover:shadow-2xl transition-all duration-500 w-full md:w-1/2 lg:w-1/3 ${
+              isVisible ? "animate-fade-in-up" : "opacity-0"
+            }`}
+            style={{
+              animationDelay: isVisible ? "600ms" : "0ms",
+            }}
+          >
+            {/* Card Header with Image */}
+            <div className="h-40 relative overflow-hidden">
+              <img 
+                src={courses[4].image} 
+                alt={courses[4].title}
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+              />
+              <div className={`absolute inset-0 bg-gradient-to-t ${courses[4].color} opacity-60`} />
+              <div className="absolute bottom-4 left-4 right-4">
+                <p className="text-white/80 text-sm font-medium">
+                  {courses[4].subtitle}
+                </p>
+                <h3 className="text-white text-xl font-bold">
+                  {courses[4].title}
+                </h3>
+              </div>
+              {/* NEW Badge */}
+              <div className="absolute top-4 right-4 bg-secondary text-secondary-foreground px-3 py-1 rounded-full text-xs font-bold">
+                NEW
+              </div>
+            </div>
+
+            {/* Card Body */}
+            <div className="p-6">
+              <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
+                {courses[4].description}
+              </p>
+
+              {/* Subjects */}
+              <div className="flex flex-wrap gap-2 mb-4">
+                {courses[4].subjects.map((subject) => (
+                  <span
+                    key={subject}
+                    className={`${courses[4].bgColor} ${courses[4].iconColor} text-xs font-medium px-2 py-1 rounded-full`}
+                  >
+                    {subject}
+                  </span>
+                ))}
+              </div>
+
+              {/* Stats */}
+              <div className="flex items-center gap-4 mb-4 text-sm text-muted-foreground">
+                <div className="flex items-center gap-1">
+                  <Clock className="w-4 h-4" />
+                  <span>{courses[4].duration}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Users className="w-4 h-4" />
+                  <span>{courses[4].students}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Star className="w-4 h-4 fill-secondary text-secondary" />
+                  <span>4.9</span>
+                </div>
+              </div>
+
+              {/* CTA */}
+              <button
+                onClick={() => handleEnroll(courses[4].id)}
+                className="w-full flex items-center justify-center gap-2 bg-foreground/5 hover:bg-primary hover:text-primary-foreground text-foreground py-3 rounded-xl font-semibold transition-all duration-300 group-hover:bg-primary group-hover:text-primary-foreground"
+              >
+                <span>Enroll Now</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
+
+      <EnrollmentDialog
+        isOpen={dialogOpen}
+        onClose={() => setDialogOpen(false)}
+        selectedCourse={selectedCourse}
+        formType="enrollment"
+      />
     </section>
   );
 };

@@ -7,7 +7,7 @@ const navLinks = [
   { name: "About", href: "#about" },
   { name: "Courses", href: "#courses" },
   { name: "Syllabus", href: "#syllabus" },
-  { name: "Mentors", href: "#mentors" },
+  { name: "Notes", href: "#notes" },
   { name: "Contact", href: "#contact" },
 ];
 
@@ -88,11 +88,11 @@ const Navbar = () => {
             {/* CTA Button */}
             <div className="hidden lg:flex items-center gap-4">
               <a
-                href="tel:+918700946839"
+                href="tel:+919999861338"
                 className="flex items-center gap-2 text-primary-foreground hover:text-secondary transition-colors"
               >
                 <Phone className="w-4 h-4" />
-                <span className="text-sm font-medium">+91 87009 46839</span>
+                <span className="text-sm font-medium">+91 99998 61338</span>
               </a>
               <button
                 onClick={() => scrollToSection("#contact")}
@@ -134,18 +134,18 @@ const Navbar = () => {
             ))}
             <div className="flex flex-col gap-3 mt-4 pt-4 border-t border-primary-foreground/10">
               <a
-                href="tel:+918700946839"
+                href="tel:+919999861338"
                 className="flex items-center gap-2 text-primary-foreground"
               >
                 <Phone className="w-4 h-4" />
-                <span>+91 87009 46839</span>
+                <span>+91 99998 61338</span>
               </a>
               <a
-                href="mailto:abhinav.asus.01@gmail.com"
+                href="mailto:modulusclasses01@gmail.com"
                 className="flex items-center gap-2 text-primary-foreground"
               >
                 <Mail className="w-4 h-4" />
-                <span>abhinav.asus.01@gmail.com</span>
+                <span>modulusclasses01@gmail.com</span>
               </a>
               <button
                 onClick={() => scrollToSection("#contact")}
@@ -166,9 +166,9 @@ const Navbar = () => {
               <span className="mx-4">//</span>
               Live Online Classes
               <span className="mx-4">//</span>
-              +91 87009 46839
+              +91 99998 61338
               <span className="mx-4">//</span>
-              Expert Physics Faculty
+              Expert Faculty for PCM/PCB
               <span className="mx-4">//</span>
               IIT-JEE & NEET Preparation
             </span>

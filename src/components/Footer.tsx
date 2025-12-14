@@ -6,15 +6,16 @@ const quickLinks = [
   { name: "About", href: "#about" },
   { name: "Courses", href: "#courses" },
   { name: "Syllabus", href: "#syllabus" },
-  { name: "Mentors", href: "#mentors" },
+  { name: "Notes", href: "#notes" },
   { name: "Contact", href: "#contact" },
 ];
 
 const courses = [
-  { name: "Class 11 Physics", href: "#courses" },
-  { name: "Class 12 Physics", href: "#courses" },
-  { name: "IIT-JEE Physics", href: "#courses" },
-  { name: "NEET Physics", href: "#courses" },
+  { name: "Class 11 (PCM/PCB)", href: "#courses" },
+  { name: "Class 12 (PCM/PCB)", href: "#courses" },
+  { name: "IIT-JEE (PCM)", href: "#courses" },
+  { name: "NEET (PCB)", href: "#courses" },
+  { name: "AI & Python", href: "#courses" },
 ];
 
 const Footer = () => {
@@ -44,8 +45,8 @@ const Footer = () => {
               </div>
             </div>
             <p className="text-primary-foreground/80 leading-relaxed">
-              Making Things Positive. Expert Physics coaching for Class 11, Class
-              12, IIT-JEE, and NEET aspirants. Join us to achieve your academic
+              Making Things Positive. Expert coaching for Class 11, Class
+              12, IIT-JEE, NEET, and AI & Python. Join us to achieve your academic
               dreams!
             </p>
             <div className="flex items-center gap-4">
@@ -125,19 +126,19 @@ const Footer = () => {
               <li className="flex items-start gap-3">
                 <Phone className="w-5 h-5 text-secondary shrink-0 mt-0.5" />
                 <a
-                  href="tel:+918700946839"
+                  href="tel:+919999861338"
                   className="text-primary-foreground/80 hover:text-secondary transition-colors"
                 >
-                  +91 87009 46839
+                  +91 99998 61338
                 </a>
               </li>
               <li className="flex items-start gap-3">
                 <Mail className="w-5 h-5 text-secondary shrink-0 mt-0.5" />
                 <a
-                  href="mailto:abhinav.asus.01@gmail.com"
+                  href="mailto:modulusclasses01@gmail.com"
                   className="text-primary-foreground/80 hover:text-secondary transition-colors break-all"
                 >
-                  abhinav.asus.01@gmail.com
+                  modulusclasses01@gmail.com
                 </a>
               </li>
               <li className="flex items-start gap-3">
