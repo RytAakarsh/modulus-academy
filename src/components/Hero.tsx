@@ -21,28 +21,28 @@ const Hero = () => {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-3xl" />
       </div>
 
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="container mx-auto px-4  relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Content */}
           <div className="space-y-8">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 bg-secondary/20 backdrop-blur-sm px-4 py-2 rounded-full border border-secondary/30 animate-fade-in-down">
+            {/* <div className="inline-flex items-center gap-2 bg-secondary/20 backdrop-blur-sm px-4 py-2 rounded-full border border-secondary/30 animate-fade-in-down">
               <Star className="w-4 h-4 text-secondary fill-secondary" />
               <span className="text-sm font-medium text-foreground">
                 Empowering Future Scientists & Engineers
               </span>
-            </div>
+            </div> */}
 
             {/* Red accent line */}
             <div className="w-16 h-1.5 bg-accent rounded-full animate-fade-in-left" />
 
             {/* Tagline */}
-            <p className="text-lg md:text-xl text-muted-foreground font-medium animate-fade-in-up opacity-0 animation-delay-100">
+            {/* <p className="text-lg md:text-xl text-muted-foreground font-medium animate-fade-in-up opacity-0 animation-delay-100">
               Master Science with Expert Guidance
-            </p>
+            </p> */}
 
             {/* Main Heading */}
-            <div className="space-y-2">
+            <div className="space-y-2 ">
               <h2 className="text-3xl md:text-4xl font-bold text-foreground animate-fade-in-up opacity-0 animation-delay-200">
                 WELCOME TO
               </h2>
@@ -88,9 +88,9 @@ const Hero = () => {
             </div>
 
             {/* Stats */}
-            <div className="flex flex-wrap gap-8 pt-4 animate-fade-in-up opacity-0 animation-delay-600">
+            <div className="flex flex-wrap gap-8 animate-fade-in-up opacity-0 animation-delay-600">
               <div className="text-center">
-                <p className="text-3xl font-bold text-primary">500+</p>
+                <p className="text-3xl font-bold text-primary">1000+</p>
                 <p className="text-sm text-muted-foreground">Students</p>
               </div>
               <div className="text-center">
@@ -98,7 +98,7 @@ const Hero = () => {
                 <p className="text-sm text-muted-foreground">Success Rate</p>
               </div>
               <div className="text-center">
-                <p className="text-3xl font-bold text-secondary">5+</p>
+                <p className="text-3xl font-bold text-secondary">10+</p>
                 <p className="text-sm text-muted-foreground">Years Experience</p>
               </div>
             </div>
