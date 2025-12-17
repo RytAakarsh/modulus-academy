@@ -28,7 +28,7 @@ const stats = [
   },
   {
     icon: Star,
-    value: 12,
+    value: 15,
     suffix: "+",
     label: "Years Experience",
     color: "text-green-600",
