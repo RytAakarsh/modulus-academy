@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
@@ -10,8 +11,11 @@ import Testimonials from "@/components/Testimonials";
 import Stats from "@/components/Stats";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
+import SplashScreen from "@/components/SplashScreen";
 
 const Index = () => {
+  const [showSplash, setShowSplash] = useState(true);
+
   return (
     <>
       <Helmet>
@@ -28,7 +32,9 @@ const Index = () => {
         <link rel="canonical" href="https://modulusclasses.com" />
       </Helmet>
 
-      <main className="min-h-screen bg-background">
+      {showSplash && <SplashScreen onComplete={() => setShowSplash(false)} />}
+
+      <main className={`min-h-screen bg-background ${showSplash ? 'opacity-0' : 'animate-fade-in'}`}>
         <Navbar />
         <Hero />
         <About />
