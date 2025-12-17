@@ -42,19 +42,19 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
       </div>
 
       {/* Logo container */}
-      <div className="relative flex flex-col items-center gap-6">
+      <div className="relative flex flex-col items-center gap-8">
         {/* Logo with scale animation */}
         <div className="animate-scale-in">
           <img
             src={logoImg}
             alt="Modulus Classes"
-            className="w-32 h-32 md:w-40 md:h-40 object-contain drop-shadow-2xl"
+            className="w-48 h-48 md:w-64 md:h-64 lg:w-72 lg:h-72 object-contain drop-shadow-2xl"
           />
         </div>
 
         {/* Brand name with fade-in */}
         <div className="animate-fade-in animation-delay-300">
-          <h1 className="text-2xl md:text-3xl font-display font-bold text-foreground tracking-wide">
+          <h1 className="text-3xl md:text-5xl lg:text-6xl font-display font-bold text-foreground tracking-wide">
             <span className="text-primary">Modulus</span>{" "}
             <span className="text-secondary">Classes</span>
           </h1>
@@ -62,7 +62,7 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
 
         {/* Tagline */}
         <div className="animate-fade-in animation-delay-600">
-          <p className="text-sm md:text-base text-muted-foreground font-medium">
+          <p className="text-base md:text-xl lg:text-2xl text-muted-foreground font-medium">
             Making Things Positive
           </p>
         </div>
