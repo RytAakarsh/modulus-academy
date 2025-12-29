@@ -8,6 +8,7 @@ import courseClass12 from "@/assets/course-class12.png";
 import courseIitjee from "@/assets/course-iitjee.png";
 import courseNeet from "@/assets/course-neet.png";
 import courseAiPython from "@/assets/course-ai-python.png";
+import courseBdesign from "@/assets/course-bdesign.png";
 
 const courses = [
   {
@@ -79,6 +80,20 @@ const courses = [
     duration: "6 Months",
     students: "50+",
     image: courseAiPython,
+  },
+  {
+    id: "bdesign",
+    title: "B-Design",
+    subtitle: "Architecture & NATA",
+    description:
+      "Comprehensive preparation for B.Arch and NATA exams with drawing, design aptitude, and creative skills development.",
+    subjects: ["Drawing", "Design Aptitude", "Architecture"],
+    color: "from-cyan-500 to-teal-600",
+    bgColor: "bg-cyan-50",
+    iconColor: "text-cyan-600",
+    duration: "1 Year",
+    students: "40+",
+    image: courseBdesign,
   },
 ];
 
@@ -155,8 +170,8 @@ const Courses = () => {
         </div>
 
         {/* Course Cards Grid - First Row (4 cards) */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-          {courses.slice(0, 4).map((course, index) => (
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+          {courses.slice(0, 6).map((course, index) => (
             <div
               key={course.id}
               className={`group bg-card rounded-2xl overflow-hidden shadow-lg border border-border hover:shadow-2xl transition-all duration-500 ${

@@ -14,6 +14,72 @@ export type Database = {
   }
   public: {
     Tables: {
+      course_lectures: {
+        Row: {
+          course_id: string
+          created_at: string
+          description: string | null
+          id: string
+          lecture_type: string | null
+          scheduled_at: string | null
+          title: string
+          video_url: string | null
+        }
+        Insert: {
+          course_id: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          lecture_type?: string | null
+          scheduled_at?: string | null
+          title: string
+          video_url?: string | null
+        }
+        Update: {
+          course_id?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          lecture_type?: string | null
+          scheduled_at?: string | null
+          title?: string
+          video_url?: string | null
+        }
+        Relationships: []
+      }
+      course_notes: {
+        Row: {
+          course_id: string
+          file_name: string
+          file_size: number | null
+          file_url: string
+          id: string
+          title: string
+          uploaded_at: string
+          uploaded_by: string | null
+        }
+        Insert: {
+          course_id: string
+          file_name: string
+          file_size?: number | null
+          file_url: string
+          id?: string
+          title: string
+          uploaded_at?: string
+          uploaded_by?: string | null
+        }
+        Update: {
+          course_id?: string
+          file_name?: string
+          file_size?: number | null
+          file_url?: string
+          id?: string
+          title?: string
+          uploaded_at?: string
+          uploaded_by?: string | null
+        }
+        Relationships: []
+      }
       form_submissions: {
         Row: {
           chapter: string | null

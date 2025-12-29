@@ -18,6 +18,7 @@ const courses = [
   { value: "iitjee", label: "IIT-JEE (Physics, Chemistry, Maths)" },
   { value: "neet", label: "NEET (Physics, Chemistry, Biology)" },
   { value: "ai-python", label: "AI & Python Programming" },
+  { value: "bdesign", label: "B-Design (B.Arch & NATA)" },
 ];
 
 const EnrollmentDialog = ({ 

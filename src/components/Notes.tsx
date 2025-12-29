@@ -211,6 +211,34 @@ const notesData = [
       },
     ],
   },
+  {
+    id: "bdesign",
+    title: "B-Design (NATA)",
+    color: "bg-cyan-500",
+    subjects: [
+      {
+        name: "Drawing & Sketching",
+        chapters: [
+          "Freehand Drawing", "Perspective Drawing", "Object Drawing",
+          "Landscape & Composition", "Memory Based Drawing", "3D Visualization"
+        ],
+      },
+      {
+        name: "Design Aptitude",
+        chapters: [
+          "Visual Perception", "Space Visualization", "Pattern Recognition",
+          "Color Theory", "Design Principles", "Creative Thinking"
+        ],
+      },
+      {
+        name: "Architecture Basics",
+        chapters: [
+          "Architectural Concepts", "Building Elements", "Scale & Proportion",
+          "Famous Architects", "Sustainable Design", "Urban Planning Basics"
+        ],
+      },
+    ],
+  },
 ];
 
 const Notes = () => {
