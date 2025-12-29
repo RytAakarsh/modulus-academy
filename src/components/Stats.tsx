@@ -20,7 +20,7 @@ const stats = [
   },
   {
     icon: BookOpen,
-    value: 5,
+    value: 6,
     suffix: "+",
     label: "Courses",
     color: "text-accent",
