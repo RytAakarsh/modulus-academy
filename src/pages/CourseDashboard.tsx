@@ -14,6 +14,7 @@ const courseConfig: Record<string, { name: string; color: string; bgColor: strin
   "iitjee": { name: "IIT-JEE", color: "from-primary to-navy-light", bgColor: "bg-primary" },
   "neet": { name: "NEET", color: "from-accent to-red-500", bgColor: "bg-accent" },
   "ai-python": { name: "AI & Python", color: "from-purple-500 to-purple-700", bgColor: "bg-purple-600" },
+  "aipython": { name: "AI & Python", color: "from-purple-500 to-purple-700", bgColor: "bg-purple-600" },
   "bdesign": { name: "B-Design (NATA)", color: "from-cyan-500 to-teal-600", bgColor: "bg-cyan-500" },
 };
 

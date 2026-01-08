@@ -11,7 +11,8 @@ const courseConfig: Record<string, { name: string; password: string; color: stri
   "class12": { name: "Class 12", password: "class12@123321", color: "from-orange-500 to-orange-600" },
   "iitjee": { name: "IIT-JEE", password: "iitjee@123321", color: "from-primary to-navy-light" },
   "neet": { name: "NEET", password: "neet@123321", color: "from-accent to-red-500" },
-  "ai-python": { name: "AI & Python", password: "ai-python@123321", color: "from-purple-500 to-purple-700" },
+  "ai-python": { name: "AI & Python", password: "aipython@123321", color: "from-purple-500 to-purple-700" },
+  "aipython": { name: "AI & Python", password: "aipython@123321", color: "from-purple-500 to-purple-700" },
   "bdesign": { name: "B-Design (NATA)", password: "bdesign@123321", color: "from-cyan-500 to-teal-600" },
 };
 
