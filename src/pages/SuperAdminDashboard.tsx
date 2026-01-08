@@ -14,7 +14,7 @@ const courses = [
   { id: "class12", name: "Class 12", color: "bg-orange-500" },
   { id: "iitjee", name: "IIT-JEE", color: "bg-primary" },
   { id: "neet", name: "NEET", color: "bg-accent" },
-  { id: "ai-python", name: "AI & Python", color: "bg-purple-600" },
+  { id: "aipython", name: "AI & Python", color: "bg-purple-600" },
   { id: "bdesign", name: "B-Design (NATA)", color: "bg-cyan-500" },
 ];
 
