@@ -2,11 +2,10 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { 
   FileText, Video, LogOut, Download, BookOpen, 
-  Play, Calendar, Clock, Loader2 
+  Play, Calendar, Loader2, MessageSquare, ExternalLink
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import logo from "@/assets/logo.png";
-import { toast } from "@/hooks/use-toast";
 
 const courseConfig: Record<string, { name: string; color: string; bgColor: string }> = {
   "class11": { name: "Class 11", color: "from-green-500 to-green-600", bgColor: "bg-green-500" },
@@ -36,12 +35,27 @@ interface Lecture {
   created_at: string;
 }
 
+interface CourseMessage {
+  id: string;
+  message: string;
+  message_type: string;
+  created_at: string;
+}
+
+const messageTypeLabels: Record<string, { label: string; color: string }> = {
+  general: { label: "General", color: "bg-blue-100 text-blue-700" },
+  live_class: { label: "🔴 Live Class", color: "bg-red-100 text-red-700" },
+  announcement: { label: "📢 Announcement", color: "bg-yellow-100 text-yellow-700" },
+  important: { label: "⚠️ Important", color: "bg-orange-100 text-orange-700" },
+};
+
 const CourseDashboard = () => {
   const { courseId } = useParams<{ courseId: string }>();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<'notes' | 'lectures'>('notes');
+  const [activeTab, setActiveTab] = useState<'notes' | 'lectures' | 'info'>('notes');
   const [notes, setNotes] = useState<Note[]>([]);
   const [lectures, setLectures] = useState<Lecture[]>([]);
+  const [messages, setMessages] = useState<CourseMessage[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const course = courseId ? courseConfig[courseId] : null;
@@ -52,21 +66,19 @@ const CourseDashboard = () => {
       navigate(`/course/${courseId}`);
       return;
     }
-
     fetchData();
   }, [courseId, navigate]);
 
   const fetchData = async () => {
     setIsLoading(true);
-    
-    const [notesRes, lecturesRes] = await Promise.all([
+    const [notesRes, lecturesRes, messagesRes] = await Promise.all([
       supabase.from('course_notes').select('*').eq('course_id', courseId).order('uploaded_at', { ascending: false }),
-      supabase.from('course_lectures').select('*').eq('course_id', courseId).order('created_at', { ascending: false })
+      supabase.from('course_lectures').select('*').eq('course_id', courseId).order('created_at', { ascending: false }),
+      supabase.from('course_messages').select('*').eq('course_id', courseId).order('created_at', { ascending: false })
     ]);
-
     if (notesRes.data) setNotes(notesRes.data);
     if (lecturesRes.data) setLectures(lecturesRes.data);
-    
+    if (messagesRes.data) setMessages(messagesRes.data);
     setIsLoading(false);
   };
 
@@ -83,9 +95,14 @@ const CourseDashboard = () => {
     );
   }
 
+  const unreadMessages = messages.filter(m => {
+    const msgDate = new Date(m.created_at);
+    const dayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+    return msgDate > dayAgo;
+  });
+
   return (
     <div className="min-h-screen bg-muted">
-      {/* Header */}
       <header className={`bg-gradient-to-r ${course.color} shadow-lg sticky top-0 z-50`}>
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -95,10 +112,7 @@ const CourseDashboard = () => {
               <p className="text-white/70 text-xs">Modulus Classes</p>
             </div>
           </div>
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-2 bg-white/20 backdrop-blur text-white px-4 py-2 rounded-lg font-medium hover:bg-white/30 transition-all"
-          >
+          <button onClick={handleLogout} className="flex items-center gap-2 bg-white/20 backdrop-blur text-white px-4 py-2 rounded-lg font-medium hover:bg-white/30 transition-all">
             <LogOut className="w-4 h-4" />
             Logout
           </button>
@@ -107,7 +121,7 @@ const CourseDashboard = () => {
 
       <main className="container mx-auto px-4 py-8">
         {/* Stats */}
-        <div className="grid grid-cols-2 gap-4 mb-8">
+        <div className="grid grid-cols-3 gap-4 mb-8">
           <div className="bg-card rounded-xl p-6 shadow-lg border border-border">
             <div className="flex items-center gap-4">
               <div className={`w-12 h-12 rounded-xl ${course.bgColor}/20 flex items-center justify-center`}>
@@ -119,7 +133,6 @@ const CourseDashboard = () => {
               </div>
             </div>
           </div>
-
           <div className="bg-card rounded-xl p-6 shadow-lg border border-border">
             <div className="flex items-center gap-4">
               <div className={`w-12 h-12 rounded-xl ${course.bgColor}/20 flex items-center justify-center`}>
@@ -131,32 +144,49 @@ const CourseDashboard = () => {
               </div>
             </div>
           </div>
+          <div className="bg-card rounded-xl p-6 shadow-lg border border-border relative">
+            <div className="flex items-center gap-4">
+              <div className={`w-12 h-12 rounded-xl ${course.bgColor}/20 flex items-center justify-center`}>
+                <MessageSquare className={`w-6 h-6 ${course.bgColor.replace('bg-', 'text-')}`} />
+              </div>
+              <div>
+                <p className="text-3xl font-bold text-foreground">{messages.length}</p>
+                <p className="text-sm text-muted-foreground">Messages</p>
+              </div>
+            </div>
+            {unreadMessages.length > 0 && (
+              <span className="absolute top-3 right-3 w-6 h-6 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-bold animate-pulse">
+                {unreadMessages.length}
+              </span>
+            )}
+          </div>
         </div>
 
         {/* Tabs */}
         <div className="flex gap-4 mb-6">
-          <button
-            onClick={() => setActiveTab('notes')}
-            className={`flex items-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all ${
-              activeTab === 'notes'
-                ? `bg-gradient-to-r ${course.color} text-white shadow-lg`
-                : 'bg-card text-foreground border border-border hover:border-primary'
-            }`}
-          >
-            <FileText className="w-5 h-5" />
-            Study Notes
-          </button>
-          <button
-            onClick={() => setActiveTab('lectures')}
-            className={`flex items-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all ${
-              activeTab === 'lectures'
-                ? `bg-gradient-to-r ${course.color} text-white shadow-lg`
-                : 'bg-card text-foreground border border-border hover:border-primary'
-            }`}
-          >
-            <Video className="w-5 h-5" />
-            Lectures
-          </button>
+          {[
+            { key: 'notes' as const, icon: FileText, label: 'Study Notes' },
+            { key: 'lectures' as const, icon: Video, label: 'Lectures' },
+            { key: 'info' as const, icon: MessageSquare, label: 'Information', badge: unreadMessages.length },
+          ].map(tab => (
+            <button
+              key={tab.key}
+              onClick={() => setActiveTab(tab.key)}
+              className={`flex items-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all relative ${
+                activeTab === tab.key
+                  ? `bg-gradient-to-r ${course.color} text-white shadow-lg`
+                  : 'bg-card text-foreground border border-border hover:border-primary'
+              }`}
+            >
+              <tab.icon className="w-5 h-5" />
+              {tab.label}
+              {tab.badge && tab.badge > 0 && activeTab !== tab.key && (
+                <span className="w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-bold">
+                  {tab.badge}
+                </span>
+              )}
+            </button>
+          ))}
         </div>
 
         {/* Content */}
@@ -173,7 +203,6 @@ const CourseDashboard = () => {
                 <p className="text-white/80 text-sm">Download and study at your own pace</p>
               </div>
             </div>
-
             {notes.length === 0 ? (
               <div className="p-12 text-center">
                 <FileText className="w-16 h-16 text-muted-foreground/50 mx-auto mb-4" />
@@ -191,20 +220,12 @@ const CourseDashboard = () => {
                       <div>
                         <p className="font-semibold text-foreground">{note.title}</p>
                         <p className="text-sm text-muted-foreground">
-                          {new Date(note.uploaded_at).toLocaleDateString('en-IN', {
-                            day: 'numeric',
-                            month: 'short',
-                            year: 'numeric'
-                          })}
+                          {new Date(note.uploaded_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                         </p>
                       </div>
                     </div>
-                    <a
-                      href={note.file_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`flex items-center gap-2 bg-gradient-to-r ${course.color} text-white px-4 py-2 rounded-lg font-medium hover:shadow-lg transition-all`}
-                    >
+                    <a href={note.file_url} target="_blank" rel="noopener noreferrer"
+                      className={`flex items-center gap-2 bg-gradient-to-r ${course.color} text-white px-4 py-2 rounded-lg font-medium hover:shadow-lg transition-all`}>
                       <Download className="w-4 h-4" />
                       Download
                     </a>
@@ -213,7 +234,7 @@ const CourseDashboard = () => {
               </div>
             )}
           </div>
-        ) : (
+        ) : activeTab === 'lectures' ? (
           <div className="bg-card rounded-xl shadow-lg border border-border overflow-hidden">
             <div className={`bg-gradient-to-r ${course.color} p-6 flex items-center gap-4`}>
               <Video className="w-8 h-8 text-white" />
@@ -222,7 +243,6 @@ const CourseDashboard = () => {
                 <p className="text-white/80 text-sm">Watch recorded and live lectures</p>
               </div>
             </div>
-
             {lectures.length === 0 ? (
               <div className="p-12 text-center">
                 <Video className="w-16 h-16 text-muted-foreground/50 mx-auto mb-4" />
@@ -239,15 +259,9 @@ const CourseDashboard = () => {
                       </div>
                       <div>
                         <p className="font-semibold text-foreground">{lecture.title}</p>
-                        {lecture.description && (
-                          <p className="text-sm text-muted-foreground line-clamp-1">{lecture.description}</p>
-                        )}
+                        {lecture.description && <p className="text-sm text-muted-foreground line-clamp-1">{lecture.description}</p>}
                         <div className="flex items-center gap-4 mt-1">
-                          <span className={`text-xs px-2 py-0.5 rounded-full ${
-                            lecture.lecture_type === 'live' 
-                              ? 'bg-red-100 text-red-600' 
-                              : 'bg-blue-100 text-blue-600'
-                          }`}>
+                          <span className={`text-xs px-2 py-0.5 rounded-full ${lecture.lecture_type === 'live' ? 'bg-red-100 text-red-600' : 'bg-blue-100 text-blue-600'}`}>
                             {lecture.lecture_type === 'live' ? 'Live' : 'Recorded'}
                           </span>
                           {lecture.scheduled_at && (
@@ -260,18 +274,67 @@ const CourseDashboard = () => {
                       </div>
                     </div>
                     {lecture.video_url && (
-                      <a
-                        href={lecture.video_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`flex items-center gap-2 bg-gradient-to-r ${course.color} text-white px-4 py-2 rounded-lg font-medium hover:shadow-lg transition-all`}
-                      >
+                      <a href={lecture.video_url} target="_blank" rel="noopener noreferrer"
+                        className={`flex items-center gap-2 bg-gradient-to-r ${course.color} text-white px-4 py-2 rounded-lg font-medium hover:shadow-lg transition-all`}>
                         <Play className="w-4 h-4" />
                         Watch
                       </a>
                     )}
                   </div>
                 ))}
+              </div>
+            )}
+          </div>
+        ) : (
+          /* Information / Messages Tab */
+          <div className="bg-card rounded-xl shadow-lg border border-border overflow-hidden">
+            <div className={`bg-gradient-to-r ${course.color} p-6 flex items-center gap-4`}>
+              <MessageSquare className="w-8 h-8 text-white" />
+              <div>
+                <h3 className="text-xl font-bold text-white">Information & Updates</h3>
+                <p className="text-white/80 text-sm">Messages, live class links & announcements from admin</p>
+              </div>
+            </div>
+            {messages.length === 0 ? (
+              <div className="p-12 text-center">
+                <MessageSquare className="w-16 h-16 text-muted-foreground/50 mx-auto mb-4" />
+                <p className="text-muted-foreground">No messages yet</p>
+                <p className="text-sm text-muted-foreground/70 mt-1">Check back later for updates from your teacher</p>
+              </div>
+            ) : (
+              <div className="divide-y divide-border">
+                {messages.map((msg) => {
+                  const typeInfo = messageTypeLabels[msg.message_type] || messageTypeLabels.general;
+                  const isRecent = new Date(msg.created_at) > new Date(Date.now() - 24 * 60 * 60 * 1000);
+                  const hasLink = msg.message.match(/https?:\/\/[^\s]+/);
+
+                  return (
+                    <div key={msg.id} className={`p-5 hover:bg-muted/50 transition-colors ${isRecent ? 'bg-primary/5 border-l-4 border-l-primary' : ''}`}>
+                      <div className="flex items-start gap-4">
+                        <div className={`w-10 h-10 rounded-full ${course.bgColor}/20 flex items-center justify-center flex-shrink-0 mt-1`}>
+                          <MessageSquare className={`w-5 h-5 ${course.bgColor.replace('bg-', 'text-')}`} />
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${typeInfo.color}`}>{typeInfo.label}</span>
+                            {isRecent && <span className="text-xs px-2 py-0.5 rounded-full bg-green-100 text-green-700 font-medium">New</span>}
+                            <span className="text-xs text-muted-foreground ml-auto">
+                              {new Date(msg.created_at).toLocaleString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                            </span>
+                          </div>
+                          <p className="text-foreground whitespace-pre-wrap">{msg.message}</p>
+                          {hasLink && (
+                            <a href={hasLink[0]} target="_blank" rel="noopener noreferrer"
+                              className={`inline-flex items-center gap-2 mt-3 bg-gradient-to-r ${course.color} text-white px-4 py-2 rounded-lg font-medium hover:shadow-lg transition-all text-sm`}>
+                              <ExternalLink className="w-4 h-4" />
+                              Open Link
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             )}
           </div>
