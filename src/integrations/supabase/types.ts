@@ -47,6 +47,30 @@ export type Database = {
         }
         Relationships: []
       }
+      course_messages: {
+        Row: {
+          course_id: string
+          created_at: string
+          id: string
+          message: string
+          message_type: string
+        }
+        Insert: {
+          course_id: string
+          created_at?: string
+          id?: string
+          message: string
+          message_type?: string
+        }
+        Update: {
+          course_id?: string
+          created_at?: string
+          id?: string
+          message?: string
+          message_type?: string
+        }
+        Relationships: []
+      }
       course_notes: {
         Row: {
           course_id: string
