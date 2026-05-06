@@ -223,6 +223,48 @@ const SuperAdminDashboard = () => {
     }
   };
 
+  const handleCreateAccount = async () => {
+    const { studentName, courseId, email, password } = accountForm;
+    if (!studentName.trim() || !courseId || !email.trim() || !password.trim()) {
+      toast({ title: "Please fill all fields", variant: "destructive" });
+      return;
+    }
+    if (password.length < 6) {
+      toast({ title: "Password must be at least 6 characters", variant: "destructive" });
+      return;
+    }
+    try {
+      const { error } = await supabase.from('student_accounts').insert({
+        student_name: studentName.trim(),
+        course_id: courseId,
+        email: email.trim().toLowerCase(),
+        password: password,
+      });
+      if (error) throw error;
+      toast({ title: "Student account created!", description: `${studentName} can now log in to ${getCourseName(courseId)}` });
+      setShowAccountModal(false);
+      setAccountForm({ studentName: "", courseId: "", email: "", password: "" });
+      fetchData();
+    } catch (error: any) {
+      toast({
+        title: "Failed to create account",
+        description: error.message?.includes("duplicate") ? "An account with this email already exists for this course." : error.message,
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleDeleteAccount = async (id: string) => {
+    if (!confirm("Delete this student account? They will no longer be able to log in.")) return;
+    try {
+      await supabase.from('student_accounts').delete().eq('id', id);
+      toast({ title: "Student account deleted" });
+      fetchData();
+    } catch (error: any) {
+      toast({ title: "Delete failed", description: error.message, variant: "destructive" });
+    }
+  };
+
   const getCourseName = (courseId: string) => courses.find(c => c.id === courseId)?.name || courseId;
   const getCourseColor = (courseId: string) => courses.find(c => c.id === courseId)?.color || 'bg-gray-500';
 
