@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { 
   LogOut, Video, FileText, Upload, Trash2, 
   ExternalLink, Loader2, X, BookOpen, Plus,
-  Radio, MessageSquare, Send
+  Radio, MessageSquare, Send, UserPlus, Users, Eye, EyeOff
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import logo from "@/assets/logo.png";
@@ -45,18 +45,32 @@ interface CourseMessage {
   created_at: string;
 }
 
+interface StudentAccount {
+  id: string;
+  student_name: string;
+  course_id: string;
+  email: string;
+  password: string;
+  created_at: string;
+}
+
 const SuperAdminDashboard = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<'golive' | 'notes' | 'lectures' | 'messages'>('golive');
+  const [activeTab, setActiveTab] = useState<'golive' | 'notes' | 'lectures' | 'messages' | 'accounts'>('golive');
   const [notes, setNotes] = useState<Note[]>([]);
   const [lectures, setLectures] = useState<Lecture[]>([]);
   const [messages, setMessages] = useState<CourseMessage[]>([]);
+  const [students, setStudents] = useState<StudentAccount[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedCourse, setSelectedCourse] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [showLectureModal, setShowLectureModal] = useState(false);
   const [showMessageModal, setShowMessageModal] = useState(false);
+  const [showAccountModal, setShowAccountModal] = useState(false);
+  const [showStudentPwd, setShowStudentPwd] = useState<Record<string, boolean>>({});
+  const [accountForm, setAccountForm] = useState({ studentName: "", courseId: "", email: "", password: "" });
+  const [showFormPwd, setShowFormPwd] = useState(false);
   const [noteTitle, setNoteTitle] = useState("");
   const [lectureForm, setLectureForm] = useState({ title: "", description: "", videoUrl: "", courseId: "" });
   const [messageForm, setMessageForm] = useState({ message: "", courseId: "", messageType: "general" });
@@ -73,14 +87,16 @@ const SuperAdminDashboard = () => {
 
   const fetchData = async () => {
     setIsLoading(true);
-    const [notesRes, lecturesRes, messagesRes] = await Promise.all([
+    const [notesRes, lecturesRes, messagesRes, studentsRes] = await Promise.all([
       supabase.from('course_notes').select('*').order('uploaded_at', { ascending: false }),
       supabase.from('course_lectures').select('*').order('created_at', { ascending: false }),
-      supabase.from('course_messages').select('*').order('created_at', { ascending: false })
+      supabase.from('course_messages').select('*').order('created_at', { ascending: false }),
+      supabase.from('student_accounts').select('*').order('created_at', { ascending: false })
     ]);
     if (notesRes.data) setNotes(notesRes.data);
     if (lecturesRes.data) setLectures(lecturesRes.data);
     if (messagesRes.data) setMessages(messagesRes.data);
+    if (studentsRes.data) setStudents(studentsRes.data);
     setIsLoading(false);
   };
 
