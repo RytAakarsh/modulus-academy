@@ -349,6 +349,7 @@ const SuperAdminDashboard = () => {
             { key: 'notes' as const, icon: FileText, label: 'Manage Notes' },
             { key: 'lectures' as const, icon: Video, label: 'Manage Lectures' },
             { key: 'messages' as const, icon: MessageSquare, label: 'Direct Messages' },
+            { key: 'accounts' as const, icon: UserPlus, label: 'Student Accounts' },
           ].map(tab => (
             <button
               key={tab.key}
