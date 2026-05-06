@@ -508,7 +508,7 @@ const SuperAdminDashboard = () => {
               </div>
             )}
           </div>
-        ) : (
+        ) : activeTab === 'messages' ? (
           /* Messages Tab */
           <div className="bg-card rounded-xl shadow-lg border border-border overflow-hidden">
             <div className="bg-gradient-to-r from-purple-600 to-purple-800 p-6 flex items-center justify-between">
@@ -556,6 +556,59 @@ const SuperAdminDashboard = () => {
                     </div>
                   );
                 })}
+              </div>
+            )}
+          </div>
+        ) : (
+          /* Student Accounts Tab */
+          <div className="bg-card rounded-xl shadow-lg border border-border overflow-hidden">
+            <div className="bg-gradient-to-r from-purple-600 to-purple-800 p-6 flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-4">
+                <Users className="w-8 h-8 text-white" />
+                <div>
+                  <h3 className="text-xl font-bold text-white">Student Accounts</h3>
+                  <p className="text-white/80 text-sm">Create & manage individual student logins</p>
+                </div>
+              </div>
+              <button onClick={() => setShowAccountModal(true)} className="flex items-center gap-2 bg-white text-purple-700 px-4 py-2 rounded-lg font-semibold hover:shadow-lg transition-all">
+                <UserPlus className="w-5 h-5" />
+                Create Account
+              </button>
+            </div>
+            {students.length === 0 ? (
+              <div className="p-12 text-center">
+                <Users className="w-16 h-16 text-muted-foreground/50 mx-auto mb-4" />
+                <p className="text-muted-foreground">No student accounts created yet</p>
+                <p className="text-sm text-muted-foreground mt-2">Click "Create Account" to add your first student</p>
+              </div>
+            ) : (
+              <div className="divide-y divide-border">
+                {students.map((s) => (
+                  <div key={s.id} className="p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 hover:bg-muted/50 transition-colors">
+                    <div className="flex items-start gap-4 flex-1 min-w-0">
+                      <div className={`w-12 h-12 rounded-xl ${getCourseColor(s.course_id)}/20 flex items-center justify-center flex-shrink-0`}>
+                        <UserPlus className={`w-6 h-6 ${getCourseColor(s.course_id).replace('bg-', 'text-')}`} />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="font-semibold text-foreground truncate">{s.student_name}</p>
+                        <p className="text-sm text-muted-foreground truncate">{s.email}</p>
+                        <div className="flex flex-wrap items-center gap-2 mt-2">
+                          <span className={`text-xs px-2 py-0.5 rounded-full ${getCourseColor(s.course_id)} text-white`}>{getCourseName(s.course_id)}</span>
+                          <span className="text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground font-mono flex items-center gap-1">
+                            {showStudentPwd[s.id] ? s.password : "•".repeat(Math.min(s.password.length, 10))}
+                            <button onClick={() => setShowStudentPwd(p => ({ ...p, [s.id]: !p[s.id] }))} className="ml-1 hover:text-foreground">
+                              {showStudentPwd[s.id] ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
+                            </button>
+                          </span>
+                          <span className="text-xs text-muted-foreground">{new Date(s.created_at).toLocaleDateString()}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <button onClick={() => handleDeleteAccount(s.id)} className="self-end sm:self-center p-2 text-red-600 hover:bg-red-100 rounded-lg transition-colors flex-shrink-0">
+                      <Trash2 className="w-5 h-5" />
+                    </button>
+                  </div>
+                ))}
               </div>
             )}
           </div>
