@@ -750,6 +750,64 @@ const SuperAdminDashboard = () => {
           </div>
         </div>
       )}
+
+      {/* Create Account Modal */}
+      {showAccountModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setShowAccountModal(false)} />
+          <div className="relative bg-card rounded-2xl shadow-2xl border border-border w-full max-w-lg overflow-hidden max-h-[90vh] overflow-y-auto">
+            <button onClick={() => setShowAccountModal(false)} className="absolute top-4 right-4 text-white/80 hover:text-white z-10"><X className="w-6 h-6" /></button>
+            <div className="bg-gradient-to-r from-purple-600 to-purple-800 p-6">
+              <div className="flex items-center gap-3">
+                <UserPlus className="w-7 h-7 text-white" />
+                <div>
+                  <h3 className="text-xl font-bold text-white">Create Student Account</h3>
+                  <p className="text-white/80 text-sm">Set login credentials for a student</p>
+                </div>
+              </div>
+            </div>
+            <div className="p-6 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">Student Name *</label>
+                <input type="text" value={accountForm.studentName} onChange={(e) => setAccountForm({ ...accountForm, studentName: e.target.value })}
+                  className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="e.g. Rahul Sharma" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">Batch / Course *</label>
+                <div className="grid grid-cols-2 gap-2">
+                  {courses.map((course) => (
+                    <button key={course.id} type="button" onClick={() => setAccountForm({ ...accountForm, courseId: course.id })}
+                      className={`p-3 rounded-xl text-left transition-all ${accountForm.courseId === course.id ? `${course.color} text-white shadow-lg` : 'bg-muted text-foreground hover:bg-muted/80'}`}>
+                      <p className="font-medium text-sm">{course.name}</p>
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">Email ID *</label>
+                <input type="email" value={accountForm.email} onChange={(e) => setAccountForm({ ...accountForm, email: e.target.value })}
+                  className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="student@example.com" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">Password *</label>
+                <div className="relative">
+                  <input type={showFormPwd ? "text" : "password"} value={accountForm.password} onChange={(e) => setAccountForm({ ...accountForm, password: e.target.value })}
+                    className="w-full px-4 py-3 pr-12 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Min 6 characters" />
+                  <button type="button" onClick={() => setShowFormPwd(!showFormPwd)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+                    {showFormPwd ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  </button>
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">Student will use this email + password to log in to their course portal.</p>
+              </div>
+              <button onClick={handleCreateAccount}
+                className="w-full bg-gradient-to-r from-purple-600 to-purple-800 text-white py-3 rounded-xl font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2">
+                <UserPlus className="w-5 h-5" />
+                Create Account
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
