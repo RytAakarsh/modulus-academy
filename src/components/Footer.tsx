@@ -163,9 +163,20 @@ const Footer = () => {
       {/* Bottom Bar */}
       <div className="border-t border-white/10">
         <div className="container mx-auto px-4 py-6">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-primary-foreground/70">
-            <p>© 2024 Modulus Classes. All rights reserved.</p>
+          <div className="flex flex-col md:flex-row items-center justify-between gap-3 text-sm text-primary-foreground/70 text-center md:text-left">
+            <p>© 2026 Modulus Classes. All rights reserved.</p>
             <p>Making Things Positive</p>
+            <p>
+              Developed By{" "}
+              <a
+                href="https://mightbemedia.in/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-secondary hover:underline transition-colors"
+              >
+                MightBeMedia
+              </a>
+            </p>
           </div>
         </div>
       </div>
