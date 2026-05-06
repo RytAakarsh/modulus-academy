@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { 
   LogOut, Video, FileText, Upload, Trash2, 
   ExternalLink, Loader2, X, BookOpen, Plus,
-  Radio, MessageSquare, Send
+  Radio, MessageSquare, Send, UserPlus, Users, Eye, EyeOff
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import logo from "@/assets/logo.png";
@@ -45,18 +45,32 @@ interface CourseMessage {
   created_at: string;
 }
 
+interface StudentAccount {
+  id: string;
+  student_name: string;
+  course_id: string;
+  email: string;
+  password: string;
+  created_at: string;
+}
+
 const SuperAdminDashboard = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<'golive' | 'notes' | 'lectures' | 'messages'>('golive');
+  const [activeTab, setActiveTab] = useState<'golive' | 'notes' | 'lectures' | 'messages' | 'accounts'>('golive');
   const [notes, setNotes] = useState<Note[]>([]);
   const [lectures, setLectures] = useState<Lecture[]>([]);
   const [messages, setMessages] = useState<CourseMessage[]>([]);
+  const [students, setStudents] = useState<StudentAccount[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedCourse, setSelectedCourse] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [showLectureModal, setShowLectureModal] = useState(false);
   const [showMessageModal, setShowMessageModal] = useState(false);
+  const [showAccountModal, setShowAccountModal] = useState(false);
+  const [showStudentPwd, setShowStudentPwd] = useState<Record<string, boolean>>({});
+  const [accountForm, setAccountForm] = useState({ studentName: "", courseId: "", email: "", password: "" });
+  const [showFormPwd, setShowFormPwd] = useState(false);
   const [noteTitle, setNoteTitle] = useState("");
   const [lectureForm, setLectureForm] = useState({ title: "", description: "", videoUrl: "", courseId: "" });
   const [messageForm, setMessageForm] = useState({ message: "", courseId: "", messageType: "general" });
@@ -73,14 +87,16 @@ const SuperAdminDashboard = () => {
 
   const fetchData = async () => {
     setIsLoading(true);
-    const [notesRes, lecturesRes, messagesRes] = await Promise.all([
+    const [notesRes, lecturesRes, messagesRes, studentsRes] = await Promise.all([
       supabase.from('course_notes').select('*').order('uploaded_at', { ascending: false }),
       supabase.from('course_lectures').select('*').order('created_at', { ascending: false }),
-      supabase.from('course_messages').select('*').order('created_at', { ascending: false })
+      supabase.from('course_messages').select('*').order('created_at', { ascending: false }),
+      supabase.from('student_accounts').select('*').order('created_at', { ascending: false })
     ]);
     if (notesRes.data) setNotes(notesRes.data);
     if (lecturesRes.data) setLectures(lecturesRes.data);
     if (messagesRes.data) setMessages(messagesRes.data);
+    if (studentsRes.data) setStudents(studentsRes.data);
     setIsLoading(false);
   };
 
@@ -207,6 +223,48 @@ const SuperAdminDashboard = () => {
     }
   };
 
+  const handleCreateAccount = async () => {
+    const { studentName, courseId, email, password } = accountForm;
+    if (!studentName.trim() || !courseId || !email.trim() || !password.trim()) {
+      toast({ title: "Please fill all fields", variant: "destructive" });
+      return;
+    }
+    if (password.length < 6) {
+      toast({ title: "Password must be at least 6 characters", variant: "destructive" });
+      return;
+    }
+    try {
+      const { error } = await supabase.from('student_accounts').insert({
+        student_name: studentName.trim(),
+        course_id: courseId,
+        email: email.trim().toLowerCase(),
+        password: password,
+      });
+      if (error) throw error;
+      toast({ title: "Student account created!", description: `${studentName} can now log in to ${getCourseName(courseId)}` });
+      setShowAccountModal(false);
+      setAccountForm({ studentName: "", courseId: "", email: "", password: "" });
+      fetchData();
+    } catch (error: any) {
+      toast({
+        title: "Failed to create account",
+        description: error.message?.includes("duplicate") ? "An account with this email already exists for this course." : error.message,
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleDeleteAccount = async (id: string) => {
+    if (!confirm("Delete this student account? They will no longer be able to log in.")) return;
+    try {
+      await supabase.from('student_accounts').delete().eq('id', id);
+      toast({ title: "Student account deleted" });
+      fetchData();
+    } catch (error: any) {
+      toast({ title: "Delete failed", description: error.message, variant: "destructive" });
+    }
+  };
+
   const getCourseName = (courseId: string) => courses.find(c => c.id === courseId)?.name || courseId;
   const getCourseColor = (courseId: string) => courses.find(c => c.id === courseId)?.color || 'bg-gray-500';
 
@@ -291,6 +349,7 @@ const SuperAdminDashboard = () => {
             { key: 'notes' as const, icon: FileText, label: 'Manage Notes' },
             { key: 'lectures' as const, icon: Video, label: 'Manage Lectures' },
             { key: 'messages' as const, icon: MessageSquare, label: 'Direct Messages' },
+            { key: 'accounts' as const, icon: UserPlus, label: 'Student Accounts' },
           ].map(tab => (
             <button
               key={tab.key}
@@ -449,7 +508,7 @@ const SuperAdminDashboard = () => {
               </div>
             )}
           </div>
-        ) : (
+        ) : activeTab === 'messages' ? (
           /* Messages Tab */
           <div className="bg-card rounded-xl shadow-lg border border-border overflow-hidden">
             <div className="bg-gradient-to-r from-purple-600 to-purple-800 p-6 flex items-center justify-between">
@@ -497,6 +556,59 @@ const SuperAdminDashboard = () => {
                     </div>
                   );
                 })}
+              </div>
+            )}
+          </div>
+        ) : (
+          /* Student Accounts Tab */
+          <div className="bg-card rounded-xl shadow-lg border border-border overflow-hidden">
+            <div className="bg-gradient-to-r from-purple-600 to-purple-800 p-6 flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-4">
+                <Users className="w-8 h-8 text-white" />
+                <div>
+                  <h3 className="text-xl font-bold text-white">Student Accounts</h3>
+                  <p className="text-white/80 text-sm">Create & manage individual student logins</p>
+                </div>
+              </div>
+              <button onClick={() => setShowAccountModal(true)} className="flex items-center gap-2 bg-white text-purple-700 px-4 py-2 rounded-lg font-semibold hover:shadow-lg transition-all">
+                <UserPlus className="w-5 h-5" />
+                Create Account
+              </button>
+            </div>
+            {students.length === 0 ? (
+              <div className="p-12 text-center">
+                <Users className="w-16 h-16 text-muted-foreground/50 mx-auto mb-4" />
+                <p className="text-muted-foreground">No student accounts created yet</p>
+                <p className="text-sm text-muted-foreground mt-2">Click "Create Account" to add your first student</p>
+              </div>
+            ) : (
+              <div className="divide-y divide-border">
+                {students.map((s) => (
+                  <div key={s.id} className="p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 hover:bg-muted/50 transition-colors">
+                    <div className="flex items-start gap-4 flex-1 min-w-0">
+                      <div className={`w-12 h-12 rounded-xl ${getCourseColor(s.course_id)}/20 flex items-center justify-center flex-shrink-0`}>
+                        <UserPlus className={`w-6 h-6 ${getCourseColor(s.course_id).replace('bg-', 'text-')}`} />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="font-semibold text-foreground truncate">{s.student_name}</p>
+                        <p className="text-sm text-muted-foreground truncate">{s.email}</p>
+                        <div className="flex flex-wrap items-center gap-2 mt-2">
+                          <span className={`text-xs px-2 py-0.5 rounded-full ${getCourseColor(s.course_id)} text-white`}>{getCourseName(s.course_id)}</span>
+                          <span className="text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground font-mono flex items-center gap-1">
+                            {showStudentPwd[s.id] ? s.password : "•".repeat(Math.min(s.password.length, 10))}
+                            <button onClick={() => setShowStudentPwd(p => ({ ...p, [s.id]: !p[s.id] }))} className="ml-1 hover:text-foreground">
+                              {showStudentPwd[s.id] ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
+                            </button>
+                          </span>
+                          <span className="text-xs text-muted-foreground">{new Date(s.created_at).toLocaleDateString()}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <button onClick={() => handleDeleteAccount(s.id)} className="self-end sm:self-center p-2 text-red-600 hover:bg-red-100 rounded-lg transition-colors flex-shrink-0">
+                      <Trash2 className="w-5 h-5" />
+                    </button>
+                  </div>
+                ))}
               </div>
             )}
           </div>
@@ -633,6 +745,64 @@ const SuperAdminDashboard = () => {
                 className="w-full bg-gradient-to-r from-purple-600 to-purple-800 text-white py-3 rounded-xl font-semibold hover:shadow-lg transition-all disabled:opacity-50 flex items-center justify-center gap-2">
                 <Send className="w-5 h-5" />
                 Send Message
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Create Account Modal */}
+      {showAccountModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setShowAccountModal(false)} />
+          <div className="relative bg-card rounded-2xl shadow-2xl border border-border w-full max-w-lg overflow-hidden max-h-[90vh] overflow-y-auto">
+            <button onClick={() => setShowAccountModal(false)} className="absolute top-4 right-4 text-white/80 hover:text-white z-10"><X className="w-6 h-6" /></button>
+            <div className="bg-gradient-to-r from-purple-600 to-purple-800 p-6">
+              <div className="flex items-center gap-3">
+                <UserPlus className="w-7 h-7 text-white" />
+                <div>
+                  <h3 className="text-xl font-bold text-white">Create Student Account</h3>
+                  <p className="text-white/80 text-sm">Set login credentials for a student</p>
+                </div>
+              </div>
+            </div>
+            <div className="p-6 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">Student Name *</label>
+                <input type="text" value={accountForm.studentName} onChange={(e) => setAccountForm({ ...accountForm, studentName: e.target.value })}
+                  className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="e.g. Rahul Sharma" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">Batch / Course *</label>
+                <div className="grid grid-cols-2 gap-2">
+                  {courses.map((course) => (
+                    <button key={course.id} type="button" onClick={() => setAccountForm({ ...accountForm, courseId: course.id })}
+                      className={`p-3 rounded-xl text-left transition-all ${accountForm.courseId === course.id ? `${course.color} text-white shadow-lg` : 'bg-muted text-foreground hover:bg-muted/80'}`}>
+                      <p className="font-medium text-sm">{course.name}</p>
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">Email ID *</label>
+                <input type="email" value={accountForm.email} onChange={(e) => setAccountForm({ ...accountForm, email: e.target.value })}
+                  className="w-full px-4 py-3 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="student@example.com" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">Password *</label>
+                <div className="relative">
+                  <input type={showFormPwd ? "text" : "password"} value={accountForm.password} onChange={(e) => setAccountForm({ ...accountForm, password: e.target.value })}
+                    className="w-full px-4 py-3 pr-12 rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Min 6 characters" />
+                  <button type="button" onClick={() => setShowFormPwd(!showFormPwd)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+                    {showFormPwd ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  </button>
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">Student will use this email + password to log in to their course portal.</p>
+              </div>
+              <button onClick={handleCreateAccount}
+                className="w-full bg-gradient-to-r from-purple-600 to-purple-800 text-white py-3 rounded-xl font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2">
+                <UserPlus className="w-5 h-5" />
+                Create Account
               </button>
             </div>
           </div>
