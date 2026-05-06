@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Eye, EyeOff, Lock, Mail, BookOpen } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { toast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const COURSE_EMAIL = "modulusclasses01@gmail.com";
 
@@ -41,24 +42,45 @@ const CourseLogin = () => {
     );
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
-    setTimeout(() => {
-      if (formData.email === COURSE_EMAIL && formData.password === course.password) {
-        localStorage.setItem(`courseAuth_${courseId}`, "true");
-        toast({ title: "Login Successful", description: `Welcome to ${course.name} Portal` });
-        navigate(`/course/${courseId}/dashboard`);
-      } else {
-        toast({ 
-          title: "Login Failed", 
-          description: "Invalid email or password",
-          variant: "destructive" 
-        });
-      }
+    // Default master credentials
+    if (formData.email === COURSE_EMAIL && formData.password === course.password) {
+      localStorage.setItem(`courseAuth_${courseId}`, "true");
+      toast({ title: "Login Successful", description: `Welcome to ${course.name} Portal` });
+      navigate(`/course/${courseId}/dashboard`);
       setIsLoading(false);
-    }, 1000);
+      return;
+    }
+
+    // Check student accounts created by Super Admin
+    const courseIds = courseId === "ai-python" || courseId === "aipython"
+      ? ["ai-python", "aipython"]
+      : [courseId!];
+
+    const { data, error } = await supabase
+      .from("student_accounts")
+      .select("*")
+      .in("course_id", courseIds)
+      .eq("email", formData.email.trim())
+      .eq("password", formData.password)
+      .maybeSingle();
+
+    if (data && !error) {
+      localStorage.setItem(`courseAuth_${courseId}`, "true");
+      localStorage.setItem(`courseStudent_${courseId}`, data.student_name);
+      toast({ title: "Login Successful", description: `Welcome ${data.student_name}` });
+      navigate(`/course/${courseId}/dashboard`);
+    } else {
+      toast({
+        title: "Login Failed",
+        description: "Invalid email or password",
+        variant: "destructive",
+      });
+    }
+    setIsLoading(false);
   };
 
   return (
